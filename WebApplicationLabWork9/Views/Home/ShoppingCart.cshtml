@@ -1,0 +1,59 @@
+﻿@using WebApplicationLabWork9.ViewModels;
+@{
+	ViewBag.Title = "Кошик";
+	decimal totalprice = 0;
+	decimal quantity = 0;
+	var userOrders = Model.orders.Where(o => o.UserId.ToString() == Model.UserId);
+	var groupedOrders = userOrders.Join(Model.products,
+										o => o.ProductId,
+										p => p.Id,
+										(o, p) => new {Id = o.ProductId, Name = p.Name, Price = p.Price, Image = p.Image})
+										.GroupBy(f => f.Id);
+}
+@model ShoppingCartViewModel;
+<div class="content">
+	<div class="picwithtext">
+		<h2>Кошик товарів</h2>
+		<img src="~/images/shopcard.png" height="50" width="50" />
+	</div>
+	<div class="cart-block">
+		<span></span><span>Назва</span><span>Ціна</span><span>Кількість</span><span>Усього</span>
+	</div>
+	@foreach(var o in groupedOrders)
+	{
+		var product = Model.products.Where(p => p.Id == o.Key).First();
+		totalprice = userOrders.Join(Model.products,
+				o => o.ProductId,
+				p => p.Id,
+				(o, p) => new { ProductId = p.Id, Price = p.Price })
+				.Where(p => p.ProductId == product.Id)
+				.Sum(p => p.Price);
+		quantity = userOrders.Count(g => g.ProductId == product.Id);
+		<div class="cart-element">
+		<div class="cart-block">
+				<span><img height="150" width="150" src="~/images/@product.Image"></span>
+				<span>@product.Name</span>
+				<span>@product.Price ₴</span>
+				<div>
+				<span>
+					@quantity
+				</span>
+					<form method="post" asp-action="Plus" asp-controller="Home" asp-route-id="@product.Id" asp-route-userId="@Model.UserId" class="formControl">
+						<input type="submit" id="plus" value="+" />
+					</form>
+					<form method="post" asp-action="Minus" asp-controller="Home" asp-route-id="@product.Id" asp-route-userId="@Model.UserId" class="formControl">
+						<input type="submit" style="top: 1px;" value="-" />
+					</form>
+				</div>
+				<span>@totalprice ₴</span>
+			</div>
+			<form class="form-delete" asp-controller="Home" asp-action="Delete" method="post" asp-route-id="@product.Id" asp-route-userId="@Model.UserId">
+					<input class="delete" type="submit" value="Видалити" />
+			</form>
+		</div>
+	}
+	<div class="buy">
+		<span id="total">Загальна сума: @Model.totalsum ₴</span>
+		<button>Придбати</button>
+	</div>
+</div>

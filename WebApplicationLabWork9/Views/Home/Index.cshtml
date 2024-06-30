@@ -1,0 +1,132 @@
+﻿@using WebApplicationLabWork9.ViewModels;
+@using Microsoft.AspNetCore.Identity;
+@{
+	ViewBag.Title = "Продукти";
+}
+@model IndexViewModel
+<div class="content">
+<div class="header">
+	<h2>Лист товарів</h2>
+	<div class="control-menu">
+	<form asp-action="Index" method="get" id="filter-menu">
+	<div class="filters">
+		<label>
+			<input name="categories" type="radio" value="Система захисту" onchange="submitForm();" />
+			Системи захисту
+		</label>
+		<label>
+			<input name="categories" type="radio" value="Камера" onchange="submitForm();" />
+			Камери
+		</label>
+		<label>
+			<input name="categories" type="radio" value="Датчик руху" onchange="submitForm();" />
+			Датчики руху
+		</label>
+		@*<input placeholder="Кількість" min="1" max="100" class="quantity" name="quantity" type="number" />*@
+		@*<input type="submit" value="Знайти" class="searchBtn"/>*@
+		<a asp-action="Index" class="clearFilter">Прибрати фільтри</a>
+	</div>
+	</form>
+	<script>
+		function submitForm() {
+			document.getElementById('filter-menu').submit();
+		}
+	</script>
+	<form asp-action="Index" method="get" class="search">
+		<label>Пошук за назвою: </label>
+		<input type="text" placeholder="" name="searchString" />
+		<input type="submit" value="Пошук" class="searchBtn" />
+	</form>
+	</div>
+</div>
+<hr class="underheader" width="99%" />
+	<div class="products">
+		@foreach(Product p in Model.products)
+		{
+			<div class="product-block">
+				<img src="~/images/@p.Image?lastmod=12345" alt="@p.Name" />
+				<div class="text">
+					<p class="name">@p.Name</p>
+					<p>@p.Price ₴</p>
+					@if (User.Identity.IsAuthenticated)
+					{
+						<form asp-controller="Home" asp-action="Add" method="post">
+							<p>
+								<input class="submit" type="submit" value="Придбати" asp-action="Add" asp-all-route-data='new Dictionary<string, string>{{"UserId", Model.UserId}, {"ProductId", p.Id.ToString()}}'/>
+							</p>
+						</form>
+						@if ((User.IsInRole("manager")) || (User.IsInRole("admin")))
+						{
+							<a class="edit" asp-controller="Home" asp-action="EditProduct" asp-route-id="@p.Id">Змінити</a>
+						}
+					}
+				</div>
+			</div>
+		}
+		@*<div class="product-block">
+			<img src="~/images/product1.jpg" alt="Ajax MultiTransmitter WHITE" />
+			<div class="text">
+				<p>Ajax MultiTransmitter WHITE</p>
+				<p>4 900,00 ₴</p>
+				<form asp-controller="Home" asp-action="Add" method="post">
+					<input placeholder="Кількість" min="1" max="100" class="quantity" asp-for="Quantity" name="quantity" type="number" />
+					<p><input class="submit" type="submit" value="Придбати" asp-action="Add" asp-all-route-data='new Dictionary<string, string>{ {"Name", "Ajax MultiTransmitter WHITE"}, {"Price", "4900.00"}, {"Image", "product1.jpg"} }' /></p>
+				</form>
+			</div>
+		</div>
+		<div class="product-block">
+			<img src="~/images/product2.jpeg" alt="Ajax MultiTransmitter BLACK" />
+			<div class="text">
+				<p>Ajax MultiTransmitter BLACK</p>
+				<p class="cost">4 199,00 ₴</p>
+				<form asp-controller="Home" asp-action="Add">
+					<input placeholder="Кількість" min="1" max="100" class="quantity" asp-for="Quantity" name="quantity" type="number" />
+					<p><input class="submit" type="submit" value="Придбати" asp-action="Add" asp-all-route-data='new Dictionary<string, string>{ {"Name", "Ajax MultiTransmitter Black"}, {"Price", "4199.00"}, {"Image", "product2.jpeg"} }' /></p>
+				</form>
+			</div>
+		</div>
+		<div class="product-block">
+			<img src="~/images/product3.jpeg" alt="Ajax HUB 2" />
+			<div class="text">
+				<p>Ajax HUB 2</p>
+				<p>6 299,00 ₴</p>
+				<form asp-controller="Home" asp-action="Add">
+					<input placeholder="Кількість" min="1" max="100" class="quantity" asp-for="Quantity" name="quantity" type="number" />
+					<p><input class="submit" type="submit" value="Придбати" asp-action="Add" asp-all-route-data='new Dictionary<string, string>{ {"Name", "Ajax HUB 2"}, {"Price", "6299.00"}, {"Image", "product3.jpeg"} }' /></p>
+				</form>
+			</div>
+		</div>
+		<div class="product-block">
+			<img style="margin: 24px 0;" src="~/images/product4.jpg" alt="Perenio PEACG01" />
+			<div class="text">
+				<p>Perenio PEACG01</p>
+				<p>3 199,00 ₴</p>
+				<form asp-controller="Home" asp-action="Add">
+					<input placeholder="Кількість" min="1" max="100" class="quantity" asp-for="Quantity" name="quantity" type="number" />
+					<p><input class="submit" type="submit" value="Придбати" asp-action="Add" asp-all-route-data='new Dictionary<string, string>{ {"Name", "Perenio PEACG01"}, {"Price", "3199.00"}, {"Image", "product4.jpg"} }' /></p>
+				</form>
+			</div>
+		</div>*@
+	</div>
+	@if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+	{
+		<div class="createBtn">
+			<form asp-action="CreateProduct">
+			<button id="addProduct">Додати товар</button>
+		</form>
+		@*<button asp-action="ClearOrders">Очистити Orders</button>*@
+	</div>
+	}
+	@for(int i = 1; i <= Model.productsList.TotalPages; i++)
+	{
+		@if (i == Model.productsList.PageNumber)
+		{
+			<a name="pageNumber" asp-route-pageNumber="@i" class="pageBtn selected">@i.ToString()</a>
+		}
+		else
+		{
+			<a name="pageNumber" asp-route-pageNumber="@i" class="pageBtn">@i.ToString()</a>
+		}
+	}
+</div>
+<hr class="underheader" width="99%" />

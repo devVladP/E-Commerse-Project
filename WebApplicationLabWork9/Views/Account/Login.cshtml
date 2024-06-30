@@ -1,0 +1,31 @@
+﻿@using WebApplicationLabWork9.ViewModels;
+@model LoginViewModel;
+
+@{
+    ViewBag.Title = "Логін";
+}
+<div class="content">
+    @if(TempData["Error"] != null)
+    {
+        <div class="alert-danger">
+            <span><b>Sorry!</b> - @TempData["Error"]</span>
+        </div>
+    }
+    <form asp-action="Login" class="formLogin">
+        <div class="loginContent">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h2 class="formHead">Увійти</h2>
+            <div>
+                <input asp-for="Email" placeholder="Логін" class="login field">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div>
+                <input asp-for="Password" placeholder="Пароль" class="password field">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div>
+                <input type="submit" id="loginBtn" value="Увійти">
+            </div>
+        </div>
+    </form>
+</div>

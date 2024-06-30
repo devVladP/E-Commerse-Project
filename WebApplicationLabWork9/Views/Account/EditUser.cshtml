@@ -1,0 +1,41 @@
+﻿@using WebApplicationLabWork9.ViewModels;
+@{
+    ViewBag.Title = "Профіль Користувача";
+}
+@model EditUserViewModel;
+<div class="content">
+    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+    <div class="formEdit">
+        <form class="userForm" method="post" asp-action="Edit">
+            <div class="userForm-block">
+                <label>Email</label>
+                <input required type="text" class="inputUser" asp-for="@Model.Email" />
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+            <div class="userForm-block">
+                <label>Ім'я</label>
+                <input type="text" class="inputUser" asp-for="@Model.FirstName" />
+            </div>
+            <div class="userForm-block">
+                <label>Прізвище</label>
+                <input type="text" class="inputUser" asp-for="@Model.LastName" />
+            </div>
+            <div class="userForm-block">
+                <label>Стать</label>
+                <select asp-for="@Model.Gender">
+                    <option hidden></option>
+                    <option value="Чоловічий">Чоловічий</option>
+                    <option value="Жіночий">Жіночий</option>
+                    <option value="Інший">Інший</option>
+                </select>
+            </div>
+            <div class="userForm-block">
+                <label>Вік</label>
+                <input min="1" max="126" type="number" class="inputUser" asp-for="@Model.Age" />
+            </div>
+            <div class="edit">
+                <input type="submit" value="Змінити" asp-route-Id="@Model.Id"/>
+            </div>
+        </form>
+    </div>
+</div>

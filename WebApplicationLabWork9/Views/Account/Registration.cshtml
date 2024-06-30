@@ -1,0 +1,105 @@
+﻿@using WebApplicationLabWork9.ViewModels;
+@model RegistrationViewModel;
+@{
+    ViewBag.Title = "Реєстрація";
+}
+<div class="content">
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert-danger">
+			<span><b>Sorry!</b> - @TempData["Error"]</span>
+		</div>
+	}
+	<form class="formRegistration" asp-action="Registration">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="formContent">
+			<h2 class="formHead">Логін</h2>
+			<div>
+				<input asp-for="Email" placeholder="Логін" class="login field">
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div>
+				<label class="usernameLabel">Ім'я користувача</label>
+			</div>
+			<div>
+				<input asp-for="UserName" placeholder="Ім'я користувача" class="username field">
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div>
+				<label class="passwordLabel">Пароль</label>
+			</div>
+			<div>
+				<input asp-for="Password" placeholder="Пароль" id="password">
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<progress value="0" max="100" id='meter'></progress>
+			<span class="passwordDiff">Складність паролю: </span>
+			<script>
+				const form = document.querySelector('.content .formRegistration');
+				let passwordText = form.querySelector(".formContent .passwordDiff");
+				let strengthbar = document.getElementById("meter");
+				const passwordInput = document.getElementById('password');
+
+					const validatePassword = function() {
+						let strength = 0;
+						if (passwordInput.value.match(/[a-z]+/)) {
+    						strength += 1;
+  						}
+  						if (passwordInput.value.match(/[A-Z]+/)) {
+    						strength += 1;
+  						}	
+  						if (passwordInput.value.match(/[0-9]+/)) {
+    						strength += 1;
+  						}
+  						if (passwordInput.value.match(/[$@@#&!]+/)) {
+    						strength += 1;
+  						}
+
+  						switch (strength) {
+    						case 0:
+      						strengthbar.value = 0;
+      						passwordText.innerHTML = "Складність паролю: дуже низька";
+      						break;
+
+    						case 1:
+      						strengthbar.value = 25;
+      						passwordText.innerHTML = "Складність паролю: низька";
+      						break;
+
+    						case 2:
+      						strengthbar.value = 50;
+      						passwordText.innerHTML = "Складність паролю: середня";
+      						break;
+
+    						case 3:
+      						strengthbar.value = 75;
+      						passwordText.innerHTML = "Складність паролю: висока";
+      						break;
+
+    						case 4:
+      						strengthbar.value = 100;
+      						passwordText.innerHTML = "Складність паролю: дуже висока";
+      						break;
+  						};
+					};
+
+				form.addEventListener('keyup', function () {
+					validatePassword();
+				});
+			</script>
+			<div>
+				<label class="passwordConfirmLabel">Підтвердити пароль</label>
+			</div>
+			<div>
+				<input asp-for="ConfirmedPassword" placeholder="Підтвердіть пароль" class="passwordConfirmation field">
+				<span asp-validation-for="ConfirmedPassword" class="text-danger"></span>
+			</div>
+			<div>
+				<input type="submit" id="validateBtn" value="Реєстрація">
+			</div>
+			<div>
+				<input type="reset" id="resetBtn" value="Очистити">
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,53 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplicationLabWork9.ViewModels;
+@{
+	ViewBag.Title = "Додавання Товару";
+}
+@model CreateProductViewModel;
+<div class="content">
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert-danger">
+			<span><b>Вибачте!</b> - @TempData["Error"]</span>
+		</div>
+	}
+	<form class="formCreate" asp-action="CreateProduct">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="formContent">
+			<h2 id="formHead">Назва продукту</h2>
+			<div>
+				<input asp-for="Name" placeholder="Назва продукту" class="name field">
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+			<div>
+				<label class="">Ціна</label>
+			</div>
+			<div>
+				<input asp-for="Price" placeholder="Ціна" class="price field">
+				<span asp-validation-for="Price" class="text-danger"></span>
+			</div>
+			<div>
+				<label class="">Категорія</label>
+			</div>
+			<div>
+				<input asp-for="Category" placeholder="Ціна" class="price field">
+				<span asp-validation-for="Category" class="text-danger"></span>
+			</div>
+			<div>
+				<label class="">Фото продукту</label>
+			</div>
+			<div>
+				<input asp-for="Image" placeholder="Назва фото" class="textimage field">
+				<span asp-validation-for="Image" class="text-danger"></span>
+			</div>
+			<div>
+				<input type="submit" id="validateBtn" value="Додати">
+			</div>
+			<div>
+				<input type="reset" id="resetBtn" value="Очистити">
+			</div>
+		</div>
+	</form>
+</div>

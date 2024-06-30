@@ -1,0 +1,37 @@
+﻿<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/css/styleLogin.css" />
+    <link rel="icon" href="~/images/favicon.png" type="image/x-icon">
+    <meta charset="utf-8" />
+    <meta name="viewport" width="device-witdth" />
+</head>
+<body>
+    <div class="nav">
+        <a asp-action="HomePage" asp-controller="Home" id="logo"><h3>Safe<span class="orange">Try</span></h3></a>
+        <div class="links">
+            <a asp-controller="Home" asp-action="Index">Продукти</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Home" asp-action="ShoppingCart">Кошик</a>
+                <a asp-controller="Account" asp-action="EditUser" style="text-decoration: underline">@User.Identity.Name</a>
+                <form asp-controller="Account" asp-action="Logout" class="formLogout">
+                    <button type="submit">Вийти</button>
+                </form>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login">Логін</a>
+                <a asp-controller="Account" asp-action="Registration">Реєстрація</a>
+            }
+        </div>
+    </div>
+    @RenderBody()
+    <div class="footer">
+        <h4>&copy; by Safe<span class="orange">Try</span> Усі права захищені</h4>
+    </div>
+</body>
+</html>
